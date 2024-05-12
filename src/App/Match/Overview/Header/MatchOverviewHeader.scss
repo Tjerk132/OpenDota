@@ -1,0 +1,13 @@
+.MultiTableCell-root  {
+    border: 0;
+}
+
+.match-overview-header {
+    padding: 0 8px;
+    text-align: left;
+
+    &__title {
+        font-size: 20px;
+        max-height: 36px;
+    }
+}
