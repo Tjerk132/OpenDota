@@ -1,0 +1,19 @@
+.player-item {
+    height: 28px;
+    width: 38px;
+    padding: 2px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, white 0%, #bbbbbb 100%);
+    &--neutral {
+        height: 28px;
+        width: 28px;
+        padding: 2px;
+        border-radius: 20px;
+    }
+    &--backpack {
+        height: 24px;
+        width: 32px;
+        padding: 2px;
+        border-radius: 4px;
+    }
+}

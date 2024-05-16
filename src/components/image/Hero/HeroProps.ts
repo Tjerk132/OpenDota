@@ -1,4 +1,8 @@
+import { CSSProperties } from "react";
+import { OverlayProps } from "./OverlayProps";
+
 export interface HeroProps {
     heroId: number;
-    level: number;
+    overlay?: OverlayProps;
+    style?: CSSProperties;
 }

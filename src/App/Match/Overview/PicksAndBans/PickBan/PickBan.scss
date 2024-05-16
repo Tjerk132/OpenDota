@@ -1,0 +1,22 @@
+.pick-ban {
+    &--radiant {
+        background: rgba(146, 165, 37, 0.12) !important;
+    }
+    &--dire {
+        background: rgba(194, 60, 42, 0.12) !important;
+    }
+    &__label {
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 20px;
+        padding: 2px 4px;
+        background: rgba(0, 0, 0, 0.1);
+    }
+    &__label>p {
+        color: white;
+        font-weight: 600;
+        font-size: 12px;
+    }
+}

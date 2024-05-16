@@ -1,5 +1,7 @@
 import { PlayerProps } from "../../../../domain/Player/PlayerProps";
 
 export interface PlayersTableProps {
-    rows: PlayerProps[];
+    selectedTab: number;
+    setTab: (index: number) => void;
+    players: PlayerProps[];
 }

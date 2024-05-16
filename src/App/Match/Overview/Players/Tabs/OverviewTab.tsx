@@ -6,11 +6,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Hero } from '../../../../../components/image/Hero/Hero';
-import { PlayersTableProps } from '../PlayersTableProps';
+import { TabProps } from './TabProps';
+import "./PlayerTabRow.scss";
 
-export const OverviewTab: React.FC<PlayersTableProps> = (props) => {
+export const OverviewTab: React.FC<TabProps> = (props) => {
 
-  const { rows: players } = props;
+  const { players } = props;
 
   return (
     <TableContainer component={Paper}>
@@ -32,8 +33,9 @@ export const OverviewTab: React.FC<PlayersTableProps> = (props) => {
             <TableRow
               key={player.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              className={`player-tab-row--${player.teamSide}`}
             >
-              <TableCell><Hero heroId={player.heroId} level={player.level} /></TableCell>
+              <TableCell><Hero heroId={player.heroId} overlay={{ text: player.level, position: 'bottom-right' }} /></TableCell>
               <TableCell>{player.role}</TableCell>
               <TableCell>{player.lane}</TableCell>
               <TableCell>{player.player ?? "Unknown"}</TableCell>

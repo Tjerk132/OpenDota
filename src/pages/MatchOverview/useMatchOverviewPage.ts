@@ -3,11 +3,18 @@ import { Player } from "../../api/matches/DTO/Match";
 import { MatchOverviewHeaderProps } from "../../App/Match/Overview/Header/MatchOverviewHeaderProps";
 import { PlayerProps } from "../../domain/Player/PlayerProps";
 import { MatchResultProps } from "../../App/Match/Overview/Result/MatchResultProps";
+import { TeamSide } from "../../domain/Player/TeamSide";
+import { useState } from "react";
+import { PlayersTableProps } from "../../App/Match/Overview/Players/PlayersTableProps";
+import { PicksAndBansProps } from "../../App/Match/Overview/PicksAndBans/PicksAndBansProps";
 
 export const useMatchOverviewPage = (matchId: number) => {
     const { useMatch } = useMatchesQuery();
 
     const { data: match, isLoading } = useMatch(matchId);
+
+    const [tabIndex, setTabIndex] = useState(0);
+
 
     const matchOverviewHeader: MatchOverviewHeaderProps = {
         matchId: match.match_id,
@@ -24,6 +31,15 @@ export const useMatchOverviewPage = (matchId: number) => {
         direScore: match.dire_score,
         matchDuration: match.duration / 60 //sec to min
     };
+
+    const picksAndBans: any = {
+        picksAndBans: match.picks_bans?.map(pick_ban => ({
+            isPick: pick_ban.is_pick,
+            teamSide: pick_ban.team === 0 ? TeamSide.Dire : TeamSide.Radiant,
+            heroId: pick_ban.hero_id,
+            order: pick_ban.order
+        }))
+    } as PicksAndBansProps;
 
     const radiantPlayers = match.players?.filter(player => player.isRadiant) ?? [];
     const direPlayers = match.players?.filter(player => !player.isRadiant) ?? [];
@@ -54,6 +70,7 @@ export const useMatchOverviewPage = (matchId: number) => {
 
         return {
             id: index,
+            teamSide: player.isRadiant ? TeamSide.Radiant : TeamSide.Dire,
             heroId: player.hero_id,
             level: player.level,
             // 'heroId' + player.hero_id + "-lv" + player.level,
@@ -90,9 +107,20 @@ export const useMatchOverviewPage = (matchId: number) => {
         } as PlayerProps;
     };
 
-    const radiantPlayerRows = radiantPlayers.map(mapPlayerToProps);
+    const playersTable = {
+        selectedTab: tabIndex,
+        setTab: (index: number) => setTabIndex(index)
+    } as Partial<PlayersTableProps>;
 
-    const direPlayerRows = direPlayers.map(mapPlayerToProps);
+    const radiantPlayersTable = {
+        ...playersTable,
+        players: radiantPlayers.map(mapPlayerToProps)
+    } as PlayersTableProps;
 
-    return { matchOverviewHeader, matchResult, radiantPlayerRows, direPlayerRows, isLoading }
+    const direPlayersTable = {
+        ...playersTable,
+        players: direPlayers.map(mapPlayerToProps)
+    } as PlayersTableProps;
+
+    return { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, isLoading }
 }

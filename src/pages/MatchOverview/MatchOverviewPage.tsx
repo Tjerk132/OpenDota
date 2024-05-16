@@ -1,17 +1,18 @@
-import './MatchOverviewPage.css';
 import Divider from '@mui/material/Divider';
 import { useParams } from 'react-router-dom';
 import { useMatchOverviewPage } from './useMatchOverviewPage';
 import { MatchOverviewHeader } from '../../App/Match/Overview/Header/MatchOverviewHeader';
 import { MatchResult } from '../../App/Match/Overview/Result/MatchResult';
 import { PlayersTable } from '../../App/Match/Overview/Players/PlayersTable';
+import { PicksAndBans } from '../../App/Match/Overview/PicksAndBans/PicksAndBans';
+import './MatchOverviewPage.scss';
 
 export const MatchOverviewPage: React.FC = () => {
 
   const { matchId: matchIdParam } = useParams();
   const matchId = Number(matchIdParam ?? 0);
 
-  const { matchOverviewHeader, matchResult, radiantPlayerRows, direPlayerRows, isLoading } = useMatchOverviewPage(matchId);
+  const { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, isLoading } = useMatchOverviewPage(matchId);
 
   return (
     <div className="App">
@@ -27,10 +28,16 @@ export const MatchOverviewPage: React.FC = () => {
         <MatchResult {...matchResult} />
 
         <h2>The Radiant</h2>
-        <PlayersTable rows={radiantPlayerRows} />
+        <PlayersTable {...radiantPlayersTable} />
 
         <h2>The Dire</h2>
-        <PlayersTable rows={direPlayerRows} />
+        <PlayersTable {...direPlayersTable} />
+
+        <h3>Picks and Bans</h3>
+
+        <PicksAndBans {...picksAndBans} />
+
+        <br />
 
         {/*
     {JSON.stringify(match.pre_game_duration)}
@@ -49,7 +56,6 @@ export const MatchOverviewPage: React.FC = () => {
     {JSON.stringify(match.flags)}
     {JSON.stringify(match.engine)}
 \\
-    {JSON.stringify(match.picks_bans)}
     {JSON.stringify(match.od_data)}
     <br />
     {JSON.stringify(match.metadata)}

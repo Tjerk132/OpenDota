@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useQuery } from "react-query";
 import { ItemIds } from "./DTO/ItemIds";
+import { PlayerItemType } from "../../domain/Player/PlayerItemType";
 
 export const useItemsQuery = () => {
 
@@ -16,19 +17,19 @@ export const useItemsQuery = () => {
             staleTime: Infinity
         });
 
-    const useItem = (itemId: number, neutral: boolean) => {
+    const useItem = (itemId: number, type: PlayerItemType) => {
         if (itemIds) {
             const item = itemIds[itemId];
 
             if (item === "ultimate_scepter")//108
             {
-                return itemPath("aghanims_scepter", false);
+                return itemPath("aghanims_scepter", PlayerItemType.Item);
             }
-            return itemPath(item, neutral);
+            return itemPath(item, type);
         }
     }
 
-    const itemPath = (item: string, neutral: boolean) => `/items${neutral ? "/neutral" : ""}/${item}.jpg`;
+    const itemPath = (item: string, type: PlayerItemType) => `/items${type === PlayerItemType.Neutral ? "/neutral" : ""}/${item}.jpg`;
 
     return { useItem, isLoading }
 }

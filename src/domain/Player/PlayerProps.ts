@@ -1,8 +1,10 @@
 import { PlayerItem } from "./PlayerItem";
 import { PlayerBuffs } from "./PlayerBuffs";
+import { TeamSide } from "./TeamSide";
 
 export interface PlayerProps {
     id: number;
+    teamSide: TeamSide;
     //overview
     heroId: number;
     level: number;
