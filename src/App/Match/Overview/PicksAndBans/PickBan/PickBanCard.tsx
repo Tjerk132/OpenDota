@@ -7,7 +7,7 @@ import { Hero } from '../../../../../components/image/Hero/Hero';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 
-import "./PickBan.scss";
+import "./PickBanCard.scss";
 
 export const PickBanCard: React.FC<PickBan> = (props) => {
 
@@ -15,13 +15,13 @@ export const PickBanCard: React.FC<PickBan> = (props) => {
 
     return (
         <Card
-            className={`pick-ban pick-ban--${teamSide}`}>
+            className={`pick-ban-card pick-ban-card--${teamSide}`}>
             <Hero heroId={heroId} overlay={{ text: order + 1, position: 'top-right' }} style={{ width: "100%", height: "48px", maxWidth: 80, minWidth: 80 }} />
             <CardActions disableSpacing sx={{
                 height: 20,
                 padding: 0
             }}>
-                <div className='pick-ban__label'>
+                <div className='pick-ban-card__label'>
                     {
                         isPick
                             ? <>

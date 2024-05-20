@@ -1,4 +1,6 @@
 export interface Match {
+  radiant_gold_adv: number[];
+  radiant_xp_adv: number[];
   players: Player[]
   radiant_win: boolean
   duration: number

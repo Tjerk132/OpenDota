@@ -6,13 +6,17 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Hero } from '../../../../../components/image/Hero/Hero';
-import "./PlayerTabRow.scss";
 import { TabProps } from './TabProps';
+import { conditionalClassName } from '../../../../../extensions/ClassNameExtensions';
+
+import "./PlayerTabRow.scss";
 
 export const DamageTab: React.FC<TabProps> = (props) => {
 
   const { players } = props;
-  
+
+  const topAmountClasses = (condition: boolean) => conditionalClassName('player-tab-row__top-amount', condition);
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -31,19 +35,40 @@ export const DamageTab: React.FC<TabProps> = (props) => {
           {players.map((player) => (
             <TableRow
               key={player.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               className={`player-tab-row--${player.teamSide}`}
             >
               <TableCell><Hero heroId={player.heroId} overlay={{ text: player.level, position: 'bottom-right' }} /></TableCell>
               <TableCell>{player.role}</TableCell>
               <TableCell>{player.lane}</TableCell>
               <TableCell>{player.player ?? "Unknown"}</TableCell>
-              <TableCell>{player.heroDamage}</TableCell>
-              <TableCell>{player.heroHealing}</TableCell>
-              <TableCell>{player.buildingDamage}</TableCell>
-              {/* <TableCell align="right">{row.fat}</TableCell> */}
+              <TableCell
+                className={topAmountClasses(players.max(player => player.heroDamage) === player.heroDamage)}
+              >
+                {player.heroDamage}
+              </TableCell>
+              <TableCell                 
+                className={topAmountClasses(players.max(player => player.heroHealing) === player.heroHealing)}
+              >
+                {player.heroHealing}
+              </TableCell>
+              <TableCell
+                className={topAmountClasses(players.max(player => player.buildingDamage) === player.buildingDamage)}
+              >
+                {player.buildingDamage}
+              </TableCell>
             </TableRow>
           ))}
+          <TableRow
+            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+          >
+            <TableCell />
+            <TableCell />
+            <TableCell />
+            <TableCell />
+            <TableCell>{players.sum((player) => player.heroDamage)}</TableCell>
+            <TableCell>{players.sum((player) => player.heroHealing)}</TableCell>
+            <TableCell>{players.sum((player) => player.buildingDamage)}</TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </TableContainer>

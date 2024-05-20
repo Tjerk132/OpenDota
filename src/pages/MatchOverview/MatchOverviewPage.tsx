@@ -5,14 +5,17 @@ import { MatchOverviewHeader } from '../../App/Match/Overview/Header/MatchOvervi
 import { MatchResult } from '../../App/Match/Overview/Result/MatchResult';
 import { PlayersTable } from '../../App/Match/Overview/Players/PlayersTable';
 import { PicksAndBans } from '../../App/Match/Overview/PicksAndBans/PicksAndBans';
+import { TeamAdvantages } from '../../App/Match/Overview/TeamAdvantages/TeamAdvantages';
 import './MatchOverviewPage.scss';
+import { BuildingStatus } from '../../App/Match/Overview/BuildingStatus/BuildingStatus';
 
 export const MatchOverviewPage: React.FC = () => {
 
   const { matchId: matchIdParam } = useParams();
   const matchId = Number(matchIdParam ?? 0);
 
-  const { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, isLoading } = useMatchOverviewPage(matchId);
+  const { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, teamAdvantages, buildingStatus, isLoading } = useMatchOverviewPage(matchId);
+
 
   return (
     <div className="App">
@@ -37,6 +40,13 @@ export const MatchOverviewPage: React.FC = () => {
 
         <PicksAndBans {...picksAndBans} />
 
+        <h3>Team advantages per minute</h3>
+
+        <TeamAdvantages {...teamAdvantages} />
+
+        <BuildingStatus {...buildingStatus} />
+
+        <br />
         <br />
 
         {/*

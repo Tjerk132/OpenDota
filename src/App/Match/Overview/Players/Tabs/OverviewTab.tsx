@@ -7,11 +7,15 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Hero } from '../../../../../components/image/Hero/Hero';
 import { TabProps } from './TabProps';
+import { conditionalClassName } from '../../../../../extensions/ClassNameExtensions';
+
 import "./PlayerTabRow.scss";
 
 export const OverviewTab: React.FC<TabProps> = (props) => {
 
   const { players } = props;
+
+  const topAmountClasses = (condition: boolean) => conditionalClassName('player-tab-row__top-amount', condition);
 
   return (
     <TableContainer component={Paper}>
@@ -32,20 +36,46 @@ export const OverviewTab: React.FC<TabProps> = (props) => {
           {players.map((player) => (
             <TableRow
               key={player.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               className={`player-tab-row--${player.teamSide}`}
             >
               <TableCell><Hero heroId={player.heroId} overlay={{ text: player.level, position: 'bottom-right' }} /></TableCell>
               <TableCell>{player.role}</TableCell>
               <TableCell>{player.lane}</TableCell>
               <TableCell>{player.player ?? "Unknown"}</TableCell>
-              <TableCell>{player.kills}</TableCell>
-              <TableCell>{player.deaths}</TableCell>
-              <TableCell>{player.assists}</TableCell>
-              <TableCell>{player.networth}</TableCell>
-              {/* <TableCell align="right">{row.fat}</TableCell> */}
+              <TableCell
+                className={topAmountClasses(players.max(player => player.kills) === player.kills)}
+              >
+                {player.kills}
+              </TableCell>
+              <TableCell
+                className={topAmountClasses(players.min(player => player.deaths) === player.deaths)}
+              >
+                {player.deaths}
+              </TableCell>
+              <TableCell
+                className={topAmountClasses(players.max(player => player.assists) === player.assists)}
+              >
+                {player.assists}
+              </TableCell>
+              <TableCell
+                className={topAmountClasses(players.max(player => player.networth) === player.networth)}
+              >
+                {player.networth}
+              </TableCell>
             </TableRow>
           ))}
+          <TableRow
+            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+          >
+            <TableCell />
+            <TableCell />
+            <TableCell />
+            <TableCell />
+            <TableCell>{players.sum((player) => player.kills)}</TableCell>
+            <TableCell>{players.sum((player) => player.deaths)}</TableCell>
+            <TableCell>{players.sum((player) => player.assists)}</TableCell>
+            <TableCell>{players.sum((player) => player.networth)}</TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </TableContainer>

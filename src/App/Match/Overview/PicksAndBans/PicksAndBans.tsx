@@ -1,4 +1,4 @@
-import { PickBanCard } from "./PickBan/PickBan";
+import { PickBanCard } from "./PickBan/PickBanCard";
 import { PicksAndBansProps } from "./PicksAndBansProps";
 import "./PicksAndBans.scss";
 

@@ -9,12 +9,16 @@ import { Hero } from '../../../../../components/image/Hero/Hero';
 import { PlayerItem } from '../../../../../components/image/PlayerItem/PlayerItem';
 import { TabProps } from './TabProps';
 import { PlayerItemType } from '../../../../../domain/Player/PlayerItemType';
+import { conditionalClassName } from '../../../../../extensions/ClassNameExtensions';
+
 import "./PlayerTabRow.scss";
 
 export const ItemsTab: React.FC<TabProps> = (props) => {
 
   const { players } = props;
-  
+
+  const topAmountClasses = (condition: boolean) => conditionalClassName('player-tab-row__top-amount', condition);
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -32,7 +36,6 @@ export const ItemsTab: React.FC<TabProps> = (props) => {
           {players.map((player) => (
             <TableRow
               key={player.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               className={`player-tab-row--${player.teamSide}`}
             >
               <TableCell><Hero heroId={player.heroId} overlay={{ text: player.level, position: 'bottom-right' }} /></TableCell>
@@ -40,9 +43,17 @@ export const ItemsTab: React.FC<TabProps> = (props) => {
               <TableCell>{player.lane}</TableCell>
               <TableCell>{player.player}</TableCell>
               <TableCell>
-                {player.observersPlaced ?? "-"}
-                /
-                {player.sentriesPlaced ?? "-"}
+                <span
+                  className={topAmountClasses(players.max(player => player.observersPlaced ?? 0) === player.observersPlaced)}
+                >
+                  {player.observersPlaced ?? "-"}
+                </span>
+                /   
+                <span
+                  className={topAmountClasses(players.max(player => player.sentriesPlaced ?? 0) === player.sentriesPlaced)}
+                >
+                  {player.sentriesPlaced ?? "-"}
+                </span>
               </TableCell>
               <TableCell>
                 {player.buffs.aghanimsShard && <PlayerItem itemId={609} />}
@@ -56,6 +67,20 @@ export const ItemsTab: React.FC<TabProps> = (props) => {
               </TableCell>
             </TableRow>
           ))}
+          <TableRow
+            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+          >
+            <TableCell />
+            <TableCell />
+            <TableCell />
+            <TableCell />
+            <TableCell>
+              {players.sum((player) => player.observersPlaced ?? 0) || "-"}
+              /
+              {players.sum((player) => player.sentriesPlaced ?? 0) || "-"}
+            </TableCell>
+            <TableCell />
+          </TableRow>
         </TableBody>
       </Table>
     </TableContainer>

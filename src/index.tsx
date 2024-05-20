@@ -4,6 +4,7 @@ import { App } from './App/App';
 import reportWebVitals from './reportWebVitals';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import './index.scss';
+import './extensions/ArrayExtensions';
 
 const queryClient = new QueryClient({
   defaultOptions: {

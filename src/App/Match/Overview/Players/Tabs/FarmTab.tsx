@@ -6,13 +6,17 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Hero } from '../../../../../components/image/Hero/Hero';
-import "./PlayerTabRow.scss";
 import { TabProps } from './TabProps';
+import { conditionalClassName } from '../../../../../extensions/ClassNameExtensions';
+
+import "./PlayerTabRow.scss";
 
 export const FarmTab: React.FC<TabProps> = (props) => {
 
   const { players } = props;
-  
+
+  const topAmountClasses = (condition: boolean) => conditionalClassName('player-tab-row__top-amount', condition);
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -32,20 +36,46 @@ export const FarmTab: React.FC<TabProps> = (props) => {
           {players.map((player) => (
             <TableRow
               key={player.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               className={`player-tab-row--${player.teamSide}`}
             >
               <TableCell><Hero heroId={player.heroId} overlay={{ text: player.level, position: 'bottom-right' }} /></TableCell>
               <TableCell>{player.role}</TableCell>
               <TableCell>{player.lane}</TableCell>
               <TableCell>{player.player ?? "Unknown"}</TableCell>
-              <TableCell>{player.lasthits}</TableCell>
-              <TableCell>{player.denies}</TableCell>
-              <TableCell>{player.gpm}</TableCell>
-              <TableCell>{player.xppm}</TableCell>
-              {/* <TableCell align="right">{row.fat}</TableCell> */}
+              <TableCell
+                className={topAmountClasses(players.max(player => player.lasthits) === player.lasthits)}
+              >
+                {player.lasthits}
+              </TableCell>
+              <TableCell
+                className={topAmountClasses(players.max(player => player.denies) === player.denies)}
+              >
+                {player.denies}
+              </TableCell>
+              <TableCell
+                className={topAmountClasses(players.max(player => player.gpm) === player.gpm)}
+              >
+                {player.gpm}
+              </TableCell>
+              <TableCell
+                className={topAmountClasses(players.max(player => player.xppm) === player.xppm)}
+              >
+                {player.xppm}
+              </TableCell>
             </TableRow>
           ))}
+          <TableRow
+            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+          >
+            <TableCell />
+            <TableCell />
+            <TableCell />
+            <TableCell />
+            <TableCell>{players.sum((player) => player.lasthits)}</TableCell>
+            <TableCell>{players.sum((player) => player.denies)}</TableCell>
+            <TableCell>{players.sum((player) => player.gpm)}</TableCell>
+            <TableCell>{players.sum((player) => player.xppm)}</TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </TableContainer>

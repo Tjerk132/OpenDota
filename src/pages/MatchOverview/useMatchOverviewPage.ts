@@ -7,6 +7,8 @@ import { TeamSide } from "../../domain/Player/TeamSide";
 import { useState } from "react";
 import { PlayersTableProps } from "../../App/Match/Overview/Players/PlayersTableProps";
 import { PicksAndBansProps } from "../../App/Match/Overview/PicksAndBans/PicksAndBansProps";
+import { TeamAdvantagesProps } from "../../App/Match/Overview/TeamAdvantages/TeamAdvantagesProps";
+import { BuildingStatusProps } from "../../App/Match/Overview/BuildingStatus/BuildingStatusProps";
 
 export const useMatchOverviewPage = (matchId: number) => {
     const { useMatch } = useMatchesQuery();
@@ -32,14 +34,26 @@ export const useMatchOverviewPage = (matchId: number) => {
         matchDuration: match.duration / 60 //sec to min
     };
 
-    const picksAndBans: any = {
+    const picksAndBans: PicksAndBansProps = {
         picksAndBans: match.picks_bans?.map(pick_ban => ({
             isPick: pick_ban.is_pick,
             teamSide: pick_ban.team === 0 ? TeamSide.Dire : TeamSide.Radiant,
             heroId: pick_ban.hero_id,
             order: pick_ban.order
         }))
-    } as PicksAndBansProps;
+    };
+
+    const teamAdvantages: TeamAdvantagesProps = {
+        radiantGoldAdvantage: match.radiant_gold_adv,
+        radiantXpAdvantage: match.radiant_xp_adv
+    };
+
+    const buildingStatus: BuildingStatusProps = {
+        towerStatusRadiant: 0,
+        towerStatusDire: 0,
+        barracksStatusRadiant: 0,
+        barracksStatusDire: 0
+    }
 
     const radiantPlayers = match.players?.filter(player => player.isRadiant) ?? [];
     const direPlayers = match.players?.filter(player => !player.isRadiant) ?? [];
@@ -122,5 +136,5 @@ export const useMatchOverviewPage = (matchId: number) => {
         players: direPlayers.map(mapPlayerToProps)
     } as PlayersTableProps;
 
-    return { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, isLoading }
+    return { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, teamAdvantages, buildingStatus, isLoading }
 }
