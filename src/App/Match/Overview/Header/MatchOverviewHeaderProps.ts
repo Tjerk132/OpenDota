@@ -1,7 +1,7 @@
 export interface MatchOverviewHeaderProps {
     matchId: number,
-    lobbyType: number,
-    gameMode: number,
+    lobbyTypeId: number,
+    gameModeId: number,
     region: number,
     startTime: number,
     duration: number

@@ -4,6 +4,9 @@ declare global {
         max(callback: (item: T) => number): number;
         min(callback: (item: T) => number): number;
     }
+    interface String {
+        toTitleCase(separator?: string): string;
+    }
 }
 
 export { };

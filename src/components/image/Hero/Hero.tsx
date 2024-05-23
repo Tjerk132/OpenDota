@@ -1,5 +1,5 @@
-import { useHeroesQuery } from "../../../api/heroes/useHeroesQuery";
 import { HeroProps } from "./HeroProps";
+import { useHeroesQuery } from "../../../api/constants/heroes/useHeroesQuery";
 import "./Hero.scss"
 
 export const Hero: React.FC<HeroProps> = (props) => {

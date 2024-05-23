@@ -10,7 +10,7 @@ export const useMatchesQuery = () => {
         
         const { data, isLoading } = useQuery(matchKey(matchId),
             async () => {
-                const response = await axios.get<Match>("/assets/match2.json");
+                const response = await axios.get<Match>("/assets/match.json");
 
                 return response.data;
             },

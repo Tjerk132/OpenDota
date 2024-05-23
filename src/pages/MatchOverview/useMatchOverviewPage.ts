@@ -17,11 +17,10 @@ export const useMatchOverviewPage = (matchId: number) => {
 
     const [tabIndex, setTabIndex] = useState(0);
 
-
     const matchOverviewHeader: MatchOverviewHeaderProps = {
         matchId: match.match_id,
-        lobbyType: match.lobby_type,
-        gameMode: match.game_mode,
+        lobbyTypeId: match.lobby_type,
+        gameModeId: match.game_mode,
         region: match.region,
         startTime: match.start_time,
         duration: match.duration
@@ -37,7 +36,7 @@ export const useMatchOverviewPage = (matchId: number) => {
     const picksAndBans: PicksAndBansProps = {
         picksAndBans: match.picks_bans?.map(pick_ban => ({
             isPick: pick_ban.is_pick,
-            teamSide: pick_ban.team === 0 ? TeamSide.Dire : TeamSide.Radiant,
+            teamSide: pick_ban.team === 0 ? TeamSide.Radiant : TeamSide.Dire,
             heroId: pick_ban.hero_id,
             order: pick_ban.order
         }))
@@ -49,10 +48,10 @@ export const useMatchOverviewPage = (matchId: number) => {
     };
 
     const buildingStatus: BuildingStatusProps = {
-        towerStatusRadiant: 0,
-        towerStatusDire: 0,
-        barracksStatusRadiant: 0,
-        barracksStatusDire: 0
+        towerStatusRadiant: match.tower_status_radiant,
+        towerStatusDire: match.tower_status_dire,
+        barracksStatusRadiant: match.barracks_status_radiant,
+        barracksStatusDire: match.barracks_status_dire
     }
 
     const radiantPlayers = match.players?.filter(player => player.isRadiant) ?? [];

@@ -9,11 +9,16 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useLobbyTypeQuery } from "../../../../api/constants/lobby_type/useLobbyTypeQuery";
+import { useGameModeQuery } from "../../../../api/constants/game_modes/useGameModeQuery";
 
 
 export const MatchOverviewHeader: React.FC<MatchOverviewHeaderProps> = (props) => {
 
-    const { matchId, lobbyType, gameMode, region, startTime, duration } = props;
+    const { matchId, lobbyTypeId, gameModeId, region, startTime, duration } = props;
+
+    const { useLobbyType } = useLobbyTypeQuery();
+    const { useGameMode } = useGameModeQuery();
 
     const matchDuration = (duration / 60);
 
@@ -26,9 +31,9 @@ export const MatchOverviewHeader: React.FC<MatchOverviewHeaderProps> = (props) =
         var daysAgo = Math.ceil((unixNow - (unixStartTime + matchDuration)) / secondsToDays);
         if (daysAgo >= 7) {
             var weeksAgo = daysAgo / 7;
-            return `${weeksAgo} weeks ago`;
+            return `${weeksAgo.toFixed(0)} weeks ago`;
         }
-        return `${daysAgo} days ago`;
+        return `${daysAgo.toFixed(0)} days ago`;
     }
 
     return (
@@ -41,12 +46,9 @@ export const MatchOverviewHeader: React.FC<MatchOverviewHeaderProps> = (props) =
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 375 }} size="small" aria-label="matchoverview header">
                     <TableHead>
-                        <TableRow
-                        // key={index}
-                        // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell>{lobbyType}</TableCell>
-                            <TableCell>{gameMode}</TableCell>
+                        <TableRow>
+                            <TableCell>{useLobbyType(lobbyTypeId)}</TableCell>
+                            <TableCell>{useGameMode(gameModeId)}</TableCell>
                             <TableCell>{region}</TableCell>
                             <TableCell>{matchDuration.toFixed(2)}</TableCell>
                             <TableCell>{matchEndDateLabel()}</TableCell>

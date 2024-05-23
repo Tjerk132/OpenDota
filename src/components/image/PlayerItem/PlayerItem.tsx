@@ -1,7 +1,7 @@
-import { useItemsQuery } from "../../../api/items/useItemsQuery";
 import { PlayerItemProps } from "./PlayerItemProps";
 import { PlayerItemType } from "../../../domain/Player/PlayerItemType";
-import "./PlayerItem.scss"
+import { useItemsQuery } from "../../../api/constants/items/useItemsQuery";
+import "./PlayerItem.scss";
 
 export const PlayerItem: React.FC<PlayerItemProps> = (props) => {
 

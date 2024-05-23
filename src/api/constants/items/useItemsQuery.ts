@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useQuery } from "react-query";
 import { ItemIds } from "./DTO/ItemIds";
-import { PlayerItemType } from "../../domain/Player/PlayerItemType";
+import { PlayerItemType } from "../../../domain/Player/PlayerItemType";
 
 export const useItemsQuery = () => {
 
