@@ -16,7 +16,6 @@ export const MatchOverviewPage: React.FC = () => {
 
   const { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, teamAdvantages, buildingStatus, isLoading } = useMatchOverviewPage(matchId);
 
-
   return (
     <div className="App">
       <title>Match Overview</title>

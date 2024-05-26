@@ -11,14 +11,16 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useLobbyTypeQuery } from "../../../../api/constants/lobby_type/useLobbyTypeQuery";
 import { useGameModeQuery } from "../../../../api/constants/game_modes/useGameModeQuery";
+import { useRegionQuery } from "../../../../api/constants/region/useRegionQuery";
 
 
 export const MatchOverviewHeader: React.FC<MatchOverviewHeaderProps> = (props) => {
 
-    const { matchId, lobbyTypeId, gameModeId, region, startTime, duration } = props;
+    const { matchId, lobbyTypeId, gameModeId, regionId, startTime, duration } = props;
 
     const { useLobbyType } = useLobbyTypeQuery();
     const { useGameMode } = useGameModeQuery();
+    const { useRegion } = useRegionQuery();
 
     const matchDuration = (duration / 60);
 
@@ -49,7 +51,7 @@ export const MatchOverviewHeader: React.FC<MatchOverviewHeaderProps> = (props) =
                         <TableRow>
                             <TableCell>{useLobbyType(lobbyTypeId)}</TableCell>
                             <TableCell>{useGameMode(gameModeId)}</TableCell>
-                            <TableCell>{region}</TableCell>
+                            <TableCell>{useRegion(regionId)}</TableCell>
                             <TableCell>{matchDuration.toFixed(2)}</TableCell>
                             <TableCell>{matchEndDateLabel()}</TableCell>
                         </TableRow>

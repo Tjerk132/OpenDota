@@ -1,17 +1,19 @@
 import { TeamSide } from "../../../../domain/Player/TeamSide";
+import { BarracksSvg } from "./Barracks/BarracksSvg";
 import { BuildingStatusProps } from "./BuildingStatusProps";
-import { TowerSvg } from "./TowerSvg";
+import { TowerSvg } from "./Towers/TowerSvg";
 import { useBuildingStatus } from "./useBuildingStatus";
 
 export const BuildingStatus: React.FC<BuildingStatusProps> = (props) => {
 
     const { towerStatusRadiant, towerStatusDire, barracksStatusRadiant, barracksStatusDire } = props;
-    //determine color based  on retrieved status
 
-    const { towers } = useBuildingStatus(props);
-
-    const radiantTowers = Object.values(towers[TeamSide.Radiant]).flatMap(towersPositionsByLane => towersPositionsByLane);
-    const direTowers = Object.values(towers[TeamSide.Dire]).flatMap(towersPositionsByLane => towersPositionsByLane);
+    const {
+        radiantTowerStatuses: radiantTowers,
+        direTowerStatuses: direTowers,
+        radiantBarracksStatuses: radiantBarracks,
+        direBarracksStatuses: direBarracks
+    } = useBuildingStatus(towerStatusRadiant, towerStatusDire, barracksStatusRadiant, barracksStatusDire);
 
     return (<svg
         style={{
@@ -26,20 +28,40 @@ export const BuildingStatus: React.FC<BuildingStatusProps> = (props) => {
             width="500"
             height="500"
         />
-        {radiantTowers.map((position, index) => (
-            <TowerSvg key={index} svg={{
-                x: position.x,
-                y: position.y,
-            }}
-                teamSide={TeamSide.Radiant}
-            />
-        ))}
-        {direTowers.map((position, index) => (
-            <TowerSvg key={index} svg={{
-                x: position.x,
-                y: position.y,
+        {direBarracks.map((barracksStatus, index) => (
+            <BarracksSvg key={index} svg={{
+                x: barracksStatus.x,
+                y: barracksStatus.y,
             }}
                 teamSide={TeamSide.Dire}
+                isActive={barracksStatus.isActive}
+            />
+        ))}
+        {direTowers.map((towerStatus, index) => (
+            <TowerSvg key={index} svg={{
+                x: towerStatus.x,
+                y: towerStatus.y,
+            }}
+                teamSide={TeamSide.Dire}
+                isActive={towerStatus.isActive}
+            />
+        ))}
+        {radiantTowers.map((towerStatus, index) => (
+            <TowerSvg key={index} svg={{
+                x: towerStatus.x,
+                y: towerStatus.y,
+            }}
+                teamSide={TeamSide.Radiant}
+                isActive={towerStatus.isActive}
+            />
+        ))}
+        {radiantBarracks.map((barracksStatus, index) => (
+            <BarracksSvg key={index} svg={{
+                x: barracksStatus.x,
+                y: barracksStatus.y,
+            }}
+                teamSide={TeamSide.Radiant}
+                isActive={barracksStatus.isActive}
             />
         ))}
     </svg>);

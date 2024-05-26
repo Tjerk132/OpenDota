@@ -21,7 +21,7 @@ export const useMatchOverviewPage = (matchId: number) => {
         matchId: match.match_id,
         lobbyTypeId: match.lobby_type,
         gameModeId: match.game_mode,
-        region: match.region,
+        regionId: match.region,
         startTime: match.start_time,
         duration: match.duration
     };
@@ -71,12 +71,6 @@ export const useMatchOverviewPage = (matchId: number) => {
         // Extract player position (last three bits)
         const position: number = player.player_slot & 0b00000111; // Mask to keep only the last 3 bits
 
-        //should be 0-4
-        // 10000000
-        // 010011/ true/false, if 1 false0 else true
-        // 100
-        //radiant
-        // console.log("Team:", team ? "Dire" : "Radiant");
         //: 0 - full support 1 - support 2 - hard 3 - mid 4 - safe
         const items = [player.item_0, player.item_1, player.item_2, player.item_3, player.item_4, player.item_5];
         const backpack = [player.backpack_0, player.backpack_1, player.backpack_2];
@@ -86,7 +80,6 @@ export const useMatchOverviewPage = (matchId: number) => {
             teamSide: player.isRadiant ? TeamSide.Radiant : TeamSide.Dire,
             heroId: player.hero_id,
             level: player.level,
-            // 'heroId' + player.hero_id + "-lv" + player.level,
             role: 'Role', //get by team_slot,player_slot?
             lane: position.toString(),//"Lane",
             player: player.personaname,

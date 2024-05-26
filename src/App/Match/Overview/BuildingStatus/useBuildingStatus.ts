@@ -1,49 +1,82 @@
 import { TeamSide } from "../../../../domain/Player/TeamSide";
-import { BuildingStatusProps } from "./BuildingStatusProps";
+import { useBarrackLocations } from "./Barracks/useBarracksLocations";
+import { useBarracksStatus } from "./Barracks/useBarracksStatus";
+import { BarracksType } from "./BarracksType";
+import { Lane } from "./Lane";
 import { TowerPosition } from "./TowerPosition";
+import { useTowerLocations } from "./Towers/useTowerLocations";
+import { useTowerStatus } from "./Towers/useTowerStatus";
 
-export const useBuildingStatus = (props: BuildingStatusProps) => {
+export const useBuildingStatus = (
+    towerStatusRadiant: number,
+    towerStatusDire: number,
+    barracksStatusRadiant: number,
+    barracksStatusDire: number
+) => {
 
-    const { towerStatusRadiant, towerStatusDire, barracksStatusRadiant, barracksStatusDire } = props;
+    const { getActiveTowers } = useTowerStatus();
+    const { getActiveBarracks } = useBarracksStatus();
 
-    const buildings : { [key: number]: string} = {
-        0: "Radiant Tier 1 Top Tower",
-        1: "Radiant Tier 2 Top Tower",
-        2: "Radiant Tier 3 Top Tower",
-        3: "Radiant Tier 1 Middle Tower",
-        4: "Radiant Tier 2 Middle Tower",
-        5: "Radiant Tier 3 Middle Tower",
-        6: "Radiant Tier 1 Bottom Tower",
-        7: "Radiant Tier 2 Bottom Tower",
-        8: "Radiant Tier 3 Bottom Tower",
-        9: "Radiant Ancient Top Tower",
-        10: "Radiant Ancient Bottom Tower"
+    const { getByTeamSide: getTowerLocationsByTeamSide } = useTowerLocations();
+    const { getByTeamSide: getBarracksLocationsByTeamSide } = useBarrackLocations();
+
+    const activeTowersRadiant = getActiveTowers(towerStatusRadiant);
+    const activeTowersDire = getActiveTowers(towerStatusDire);
+
+    const activeBarracksRadiant = getActiveBarracks(barracksStatusRadiant);
+    const activeBarracksDire = getActiveBarracks(barracksStatusDire);
+
+    const mapTowerPositionToProps = (teamSide: TeamSide, activeTowers: {
+        lane: Lane;
+        position: TowerPosition;
+    }[]) => {
+        const towerPositions = getTowerLocationsByTeamSide(teamSide);
+
+        return towerPositions.map((([lane, towerLocations]) => {
+
+            return towerLocations.map((towerLocation => {
+
+                const activeTower = activeTowers.find(activeTower =>
+                    activeTower.lane === lane &&
+                    activeTower.position === towerLocation.position
+                );
+
+                return {
+                    isActive: activeTower !== undefined,
+                    lane,
+                    ...towerLocation
+                }
+            }));
+        })).flatMap(towersPositionsByLane => towersPositionsByLane);
     }
 
-    const active_buildings: string[] = [];
-    //Incorrect, find right way to determine status
-    for (let i = 0; i <= 10; i++) {
-        if (towerStatusRadiant & (1 << i)) {
-            active_buildings.push(buildings[i]);
-        }
+    const mapBarracksPositionToProps = (teamSide: TeamSide, activeBarracks: {
+        lane: Lane;
+        barracksType: BarracksType;
+    }[]) => {
+        const barracksPositions = getBarracksLocationsByTeamSide(teamSide);
+
+        return barracksPositions.map(([lane, barracksLocations]) => {
+
+            return barracksLocations.map(barracksLocation => {
+                const activeBarrack = activeBarracks.find(activeBarrack =>
+                    activeBarrack.lane === lane &&
+                    activeBarrack.barracksType === barracksLocation.type
+                );
+
+                return {
+                    isActive: activeBarrack !== undefined,
+                    lane,
+                    ...barracksLocation
+                }
+            })
+        }).flatMap(barracksPositionsByLane => barracksPositionsByLane);
     }
 
-    // console.log(active_buildings);
-
-    //find a way to do this automatically
-    //see position from ancient
-    const towers = {
-        [TeamSide.Radiant]: {
-            [TowerPosition.Top]: [{ x: 45, y: 340 }, { x: 45, y: 270 }, { x: 45, y: 170 }],
-            [TowerPosition.Mid]: [{ x: 100, y: 360 }, { x: 145, y: 320 }, { x: 210, y: 260 }],
-            [TowerPosition.Bot]: [{ x: 120, y: 420 }, { x: 240, y: 420 }, { x: 360, y: 420 }],
-        },
-        [TeamSide.Dire]: {
-            [TowerPosition.Top]: [{ x: 100, y: 55 }, { x: 220, y: 55 }, { x: 340, y: 55 }],
-            [TowerPosition.Mid]: [{ x: 240, y: 230 }, { x: 300, y: 185 }, { x: 360, y: 125 }],
-            [TowerPosition.Bot]: [{ x: 425, y: 150 }, { x: 425, y: 215 }, { x: 425, y: 300 }],
-        }
+    return {
+        radiantTowerStatuses: mapTowerPositionToProps(TeamSide.Radiant, activeTowersRadiant),
+        direTowerStatuses: mapTowerPositionToProps(TeamSide.Dire, activeTowersDire),
+        radiantBarracksStatuses: mapBarracksPositionToProps(TeamSide.Radiant, activeBarracksRadiant),
+        direBarracksStatuses: mapBarracksPositionToProps(TeamSide.Dire, activeBarracksDire),
     }
-
-    return { towers }
 }
