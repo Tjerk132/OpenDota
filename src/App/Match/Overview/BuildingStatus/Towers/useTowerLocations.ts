@@ -34,7 +34,7 @@ export const useTowerLocations = () => {
             ],
             [Lane.Mid]: [
                 { position: TowerPosition.Tier1, x: 240, y: 230 },
-                { position: TowerPosition.Tier2, x: 300, y: 185 },
+                { position: TowerPosition.Tier2, x: 325, y: 165 },
                 { position: TowerPosition.Tier3, x: 360, y: 125 },
                 { position: TowerPosition.AncientLeft, x: 390, y: 90 },
                 { position: TowerPosition.AncientRight, x: 410, y: 100 }

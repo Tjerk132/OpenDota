@@ -7,11 +7,11 @@ export const TowerSvg: React.FC<TowerProps> = (props) => {
         {...props}
         polygons={[
             //  <!-- Front face -->
-            "5,5 15,6 15,20 5,20",
+            { points: "5,5 15,6 15,20 5,20" },
             // <!-- Top face -->
-            "5,6 3,2 13,2 15,6",
+            { points: "5,6 3,2 13,2 15,6" },
             // <!-- Side face -->
-            "5,6 3,2 3,15 5,20"
+            { points: "5,6 3,2 3,15 5,20" }
         ]}
         lines={[
             // <!-- Left edge -->

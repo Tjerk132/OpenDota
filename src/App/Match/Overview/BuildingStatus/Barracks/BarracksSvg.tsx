@@ -7,11 +7,11 @@ export const BarracksSvg: React.FC<BarracksProps> = (props) => {
         {...props}
         polygons={[
             //  <!-- Front face -->
-            "5,20 15,20 15,15 5,15",
+            { points: "5,20 15,20 15,15 5,15" },
             // <!-- Top face -->
-            "5,15 3,10 13,10 15,15",
+            { points: "5,15 3,10 13,10 15,15" },
             // <!-- Side face -->
-            "5,15 3,10 3,15 5,20"
+            { points: "5,15 3,10 3,15 5,20" }
         ]}
         lines={[
             // <!-- Left edge -->
