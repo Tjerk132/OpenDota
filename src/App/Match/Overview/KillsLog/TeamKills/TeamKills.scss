@@ -1,0 +1,11 @@
+.team-kills {
+    max-height: 80px;
+    max-width: 300px;
+
+    &--radiant {
+        background: rgba(146, 165, 37, 0.12);
+    }
+    &--dire {
+        background: rgba(194, 60, 42, 0.12);
+    }
+}

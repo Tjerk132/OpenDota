@@ -1,0 +1,23 @@
+.player-kills {
+    display: flex;
+    max-height: 80px;
+    max-width: 300px;
+    padding: 10px;
+    justify-content: space-between;
+    margin: 2px;
+
+    &__hero {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        padding: 0 0 2px 2px;
+
+        &--inactive {
+            opacity: 0.5;
+        }
+
+        &--gold {
+            color: #FBB829;
+        }
+    }
+}

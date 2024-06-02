@@ -9,11 +9,16 @@ import { PlayersTableProps } from "../../App/Match/Overview/Players/PlayersTable
 import { PicksAndBansProps } from "../../App/Match/Overview/PicksAndBans/PicksAndBansProps";
 import { TeamAdvantagesProps } from "../../App/Match/Overview/TeamAdvantages/TeamAdvantagesProps";
 import { BuildingStatusProps } from "../../App/Match/Overview/BuildingStatus/BuildingStatusProps";
+import { KillsLogProps } from "../../App/Match/Overview/KillsLog/KillsLogProps";
+import { PlayerKillsHero } from "../../App/Match/Overview/KillsLog/TeamKills/PlayerKillsHero";
+import { useHeroesQuery } from "../../api/constants/heroes/useHeroesQuery";
 
 export const useMatchOverviewPage = (matchId: number) => {
     const { useMatch } = useMatchesQuery();
 
     const { data: match, isLoading } = useMatch(matchId);
+
+    const { useHeroesByTeam } = useHeroesQuery();
 
     const [tabIndex, setTabIndex] = useState(0);
 
@@ -56,6 +61,38 @@ export const useMatchOverviewPage = (matchId: number) => {
 
     const radiantPlayers = match.players?.filter(player => player.isRadiant) ?? [];
     const direPlayers = match.players?.filter(player => !player.isRadiant) ?? [];
+
+    const radiantHeroes = useHeroesByTeam(radiantPlayers.map(player => player.hero_id))
+    const direHeroes = useHeroesByTeam(direPlayers.map(player => player.hero_id))
+
+    const killsLog: KillsLogProps = {
+        radiantKills: radiantPlayers.map(player => ({
+            heroId: player.hero_id,
+            kills: direHeroes.map(hero => {
+                const killAmount = player.kills_log
+                    .filter(killLog => killLog.key === hero.name);
+                
+                return {
+                    heroName: hero.name,
+                    amount: killAmount.length,
+                    gainedGold: 0 //find way to determine this
+                }
+            })
+        })),
+        direKills: direPlayers.map(player => ({
+            heroId: player.hero_id,
+            kills: radiantHeroes.map(hero => {
+                const killAmount = player.kills_log
+                    .filter(killLog => killLog.key === hero.name);
+                
+                return {
+                    heroName: hero.name,
+                    amount: killAmount.length,
+                    gainedGold: 0 //find way to determine this
+                }
+            })
+        }))
+    }
 
     const mapPlayerToProps = (player: Player, index: number) => {
         // var playerSlot = player.player_slot;
@@ -128,5 +165,5 @@ export const useMatchOverviewPage = (matchId: number) => {
         players: direPlayers.map(mapPlayerToProps)
     } as PlayersTableProps;
 
-    return { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, teamAdvantages, buildingStatus, isLoading }
+    return { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, teamAdvantages, buildingStatus, killsLog, isLoading }
 }

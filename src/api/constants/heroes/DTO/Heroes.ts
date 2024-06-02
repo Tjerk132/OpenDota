@@ -1,5 +1,5 @@
-export interface Heroes {
-    [name: string]: Hero;
+export interface Heroes extends Iterable<readonly [PropertyKey, string]> {
+    [id: string]: Hero;
 }
 
 export interface Hero {

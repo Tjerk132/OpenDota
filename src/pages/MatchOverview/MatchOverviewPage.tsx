@@ -8,13 +8,14 @@ import { PicksAndBans } from '../../App/Match/Overview/PicksAndBans/PicksAndBans
 import { TeamAdvantages } from '../../App/Match/Overview/TeamAdvantages/TeamAdvantages';
 import './MatchOverviewPage.scss';
 import { BuildingStatus } from '../../App/Match/Overview/BuildingStatus/BuildingStatus';
+import { KillsLog } from '../../App/Match/Overview/KillsLog/KillsLog';
 
 export const MatchOverviewPage: React.FC = () => {
 
   const { matchId: matchIdParam } = useParams();
   const matchId = Number(matchIdParam ?? 0);
 
-  const { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, teamAdvantages, buildingStatus, isLoading } = useMatchOverviewPage(matchId);
+  const { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, teamAdvantages, buildingStatus, killsLog, isLoading } = useMatchOverviewPage(matchId);
 
   return (
     <div className="App">
@@ -45,6 +46,8 @@ export const MatchOverviewPage: React.FC = () => {
 
         <BuildingStatus {...buildingStatus} />
 
+        <KillsLog {...killsLog} />
+
         <br />
         <br />
 
@@ -52,16 +55,10 @@ export const MatchOverviewPage: React.FC = () => {
     {JSON.stringify(match.pre_game_duration)}
     {JSON.stringify(match.start_time)}
     {JSON.stringify(match.match_seq_num)}
-    {JSON.stringify(match.tower_status_radiant)}
-    {JSON.stringify(match.tower_status_dire)}
-    {JSON.stringify(match.barracks_status_radiant)}
-    {JSON.stringify(match.barracks_status_dire)}
     {JSON.stringify(match.cluster)}
     {JSON.stringify(match.first_blood_time)}
-    {JSON.stringify(match.lobby_type)}
     {JSON.stringify(match.human_players)}
     {JSON.stringify(match.leagueid)}
-    {JSON.stringify(match.game_mode)}
     {JSON.stringify(match.flags)}
     {JSON.stringify(match.engine)}
 \\

@@ -34,7 +34,7 @@ export const TeamSideCube: React.FC<TeamSideCubeProps> = (props) => {
         {...svg}
         width="24" height="30" viewBox="0 0 20 30" xmlns="http://www.w3.org/2000/svg"
     >
-        {polygons?.map((polygon, index) => <polygon {...polygon} fill={getFillColor(index)} stroke={stroke} strokeWidth={strokeWidth} />)}
-        {lines?.map((line) => <line {...line} stroke={stroke} strokeWidth={strokeWidth} />)}
+        {polygons?.map((polygon, index) => <polygon key={index} {...polygon} fill={getFillColor(index)} stroke={stroke} strokeWidth={strokeWidth} />)}
+        {lines?.map((line, index) => <line {...line} key={index} stroke={stroke} strokeWidth={strokeWidth} />)}
     </svg>
 }

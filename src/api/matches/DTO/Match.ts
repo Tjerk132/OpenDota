@@ -91,6 +91,13 @@ export interface Player {
 
   purchase_ward_observer: number;
   purchase_ward_sentry: number;
+
+  kills_log: KillLog[];
+}
+
+export interface KillLog {
+  time: number;
+  key: string;
 }
 
 export interface Benchmarks {

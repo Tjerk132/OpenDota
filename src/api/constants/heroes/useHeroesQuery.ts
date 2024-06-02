@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useQuery } from "react-query";
-import { Heroes } from "./DTO/Heroes";
+import { Hero, Heroes } from "./DTO/Heroes";
 
 export const useHeroesQuery = () => {
 
     const url = `/constants/heroes.json`;
 
-    const { data: heroes, isLoading } = useQuery("heroes",
+    const { data, isLoading } = useQuery("heroes",
         async () => {
             const response = await axios.get<Heroes>(url);
 
@@ -16,17 +16,21 @@ export const useHeroesQuery = () => {
             staleTime: Infinity
         });
 
-    const useHero = (heroId: number) => {
-        if (heroes) {
-            const hero = heroes[heroId];
+    const heroes = (isLoading || !data) ? [] : Object.values(data);
 
-            const heroString = hero.localized_name
-                .toLowerCase()
-                .replaceAll(" ", "_");
+    const useHeroById = (heroId: number) => {
+        const hero = heroes.find(hero => hero.id === heroId);
 
-            return `/heroes/${heroString}.jpg`;
-        }
+        const heroString = hero?.localized_name
+            .toLowerCase()
+            .replaceAll(" ", "_");
+
+        return `/heroes/${heroString}.jpg`;
     }
 
-    return { useHero, isLoading }
+    const useHeroesByTeam = (heroIds: number[]) => {
+        return heroes.filter(hero => heroIds.includes(hero.id));
+    }
+    
+    return { useHeroesByTeam, useHeroById, isLoading }
 }

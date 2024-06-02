@@ -19,4 +19,17 @@ Array.prototype.min = function <T>(callback: (item: T) => number): number {
     }, 0);
 }
 
+Array.prototype.groupBy = function <K, T>(keyCallback: (item: T) => K): [K, T[]][] {
+    const grouping = this.reduce((result: Map<K, T[]>, item: T) => {
+        const key = keyCallback(item);
+        if (!result.has(key)) {
+          result.set(key, []);
+        }
+        result.get(key)?.push(item);
+        return result;
+      }, new Map<K, T[]>());
+
+    return Array.from(grouping);
+};
+
 export { };
