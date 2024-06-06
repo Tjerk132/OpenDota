@@ -1,8 +1,9 @@
 import { TeamSide } from "../../../../domain/Player/TeamSide";
+import { useAncientLocations } from "./Ancient/useAncientLocations";
 import { useBarrackLocations } from "./Barracks/useBarracksLocations";
 import { useBarracksStatus } from "./Barracks/useBarracksStatus";
 import { BarracksType } from "./BarracksType";
-import { Lane } from "./Lane";
+import { Lane } from "../../../../domain/Game/Lane";
 import { TowerPosition } from "./TowerPosition";
 import { useTowerLocations } from "./Towers/useTowerLocations";
 import { useTowerStatus } from "./Towers/useTowerStatus";
@@ -11,7 +12,9 @@ export const useBuildingStatus = (
     towerStatusRadiant: number,
     towerStatusDire: number,
     barracksStatusRadiant: number,
-    barracksStatusDire: number
+    barracksStatusDire: number,
+    ancientStatusRadiant: number,
+    ancientStatusDire: number
 ) => {
 
     const { getActiveTowers } = useTowerStatus();
@@ -19,6 +22,7 @@ export const useBuildingStatus = (
 
     const { getByTeamSide: getTowerLocationsByTeamSide } = useTowerLocations();
     const { getByTeamSide: getBarracksLocationsByTeamSide } = useBarrackLocations();
+    const { getByTeamSide: getAncientLocationByTeamSide } = useAncientLocations();
 
     const activeTowersRadiant = getActiveTowers(towerStatusRadiant);
     const activeTowersDire = getActiveTowers(towerStatusDire);
@@ -73,10 +77,23 @@ export const useBuildingStatus = (
         }).flatMap(barracksPositionsByLane => barracksPositionsByLane);
     }
 
+    const mapAncientPositionToProps = (teamSide: TeamSide, ancientStatus: number) => {
+        const isActive = ancientStatus === 1;
+
+        const position = getAncientLocationByTeamSide(teamSide);
+
+        return {
+            isActive,
+            ...position
+        }
+    }
+
     return {
         radiantTowerStatuses: mapTowerPositionToProps(TeamSide.Radiant, activeTowersRadiant),
         direTowerStatuses: mapTowerPositionToProps(TeamSide.Dire, activeTowersDire),
         radiantBarracksStatuses: mapBarracksPositionToProps(TeamSide.Radiant, activeBarracksRadiant),
         direBarracksStatuses: mapBarracksPositionToProps(TeamSide.Dire, activeBarracksDire),
+        radiantAncientStatus: mapAncientPositionToProps(TeamSide.Radiant, ancientStatusRadiant),
+        direAncientStatus: mapAncientPositionToProps(TeamSide.Dire, ancientStatusDire),
     }
 }

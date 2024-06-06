@@ -8,12 +8,15 @@ import Paper from '@mui/material/Paper';
 import { Hero } from '../../../../../components/image/Hero/Hero';
 import { TabProps } from './TabProps';
 import { conditionalClassName } from '../../../../../extensions/ClassNameExtensions';
+import { useLane } from '../../../../../hooks/useLane';
 
 import "./PlayerTabRow.scss";
 
 export const FarmTab: React.FC<TabProps> = (props) => {
 
   const { players } = props;
+  
+  const { laneLabel } = useLane();
 
   const topAmountClasses = (condition: boolean) => conditionalClassName('player-tab-row__top-amount', condition);
 
@@ -40,7 +43,7 @@ export const FarmTab: React.FC<TabProps> = (props) => {
             >
               <TableCell><Hero heroId={player.heroId} overlay={{ text: player.level, position: 'bottom-right' }} /></TableCell>
               <TableCell>{player.role}</TableCell>
-              <TableCell>{player.lane}</TableCell>
+              <TableCell>{laneLabel(player.lane)}</TableCell>
               <TableCell>{player.player ?? "Unknown"}</TableCell>
               <TableCell
                 className={topAmountClasses(players.max(player => player.lasthits) === player.lasthits)}

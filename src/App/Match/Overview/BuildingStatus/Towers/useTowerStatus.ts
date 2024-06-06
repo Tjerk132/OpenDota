@@ -1,4 +1,4 @@
-import { Lane } from "../Lane";
+import { Lane } from "../../../../../domain/Game/Lane";
 import { TowerPosition } from "../TowerPosition";
 
 export const useTowerStatus = () => {

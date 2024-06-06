@@ -1,6 +1,8 @@
 import { PlayerItem } from "./PlayerItem";
 import { PlayerBuffs } from "./PlayerBuffs";
 import { TeamSide } from "./TeamSide";
+import { LaneType } from "../Game/LaneType";
+import { Role } from "../Game/Role";
 
 export interface PlayerProps {
     id: number;
@@ -8,8 +10,9 @@ export interface PlayerProps {
     //overview
     heroId: number;
     level: number;
-    role: string;
-    lane: string;
+    role: Role;
+    isRoaming: boolean;
+    lane: LaneType;
     player: string | undefined;
     kills: number;
     deaths: number;

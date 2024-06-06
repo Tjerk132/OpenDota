@@ -1,5 +1,5 @@
 import { TeamSide } from "../../../../../domain/Player/TeamSide"
-import { Lane } from "../Lane";
+import { Lane } from "../../../../../domain/Game/Lane";
 import { BarracksLocation } from "./BarracksLocation";
 
 export interface BarracksLocations {

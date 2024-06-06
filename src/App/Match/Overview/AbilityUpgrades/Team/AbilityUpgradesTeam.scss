@@ -1,0 +1,11 @@
+.ability-upgrades-team {
+    padding: 2px;
+    &__levels {
+        display: flex;
+        padding-left: 46px;
+        font-size: 12px;
+        span {
+            width: 28px;
+        }
+    }
+}

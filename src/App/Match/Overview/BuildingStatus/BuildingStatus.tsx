@@ -1,4 +1,5 @@
 import { TeamSide } from "../../../../domain/Player/TeamSide";
+import { AncientSvg } from "./Ancient/AncientSvg";
 import { BarracksSvg } from "./Barracks/BarracksSvg";
 import { BuildingStatusProps } from "./BuildingStatusProps";
 import { TowerSvg } from "./Towers/TowerSvg";
@@ -6,14 +7,16 @@ import { useBuildingStatus } from "./useBuildingStatus";
 
 export const BuildingStatus: React.FC<BuildingStatusProps> = (props) => {
 
-    const { towerStatusRadiant, towerStatusDire, barracksStatusRadiant, barracksStatusDire } = props;
+    const { towerStatusRadiant, towerStatusDire, barracksStatusRadiant, barracksStatusDire, ancientStatusRadiant, ancientStatusDire } = props;
 
     const {
         radiantTowerStatuses: radiantTowers,
         direTowerStatuses: direTowers,
         radiantBarracksStatuses: radiantBarracks,
-        direBarracksStatuses: direBarracks
-    } = useBuildingStatus(towerStatusRadiant, towerStatusDire, barracksStatusRadiant, barracksStatusDire);
+        direBarracksStatuses: direBarracks,
+        radiantAncientStatus: radiantAncient,
+        direAncientStatus: direAncient
+    } = useBuildingStatus(towerStatusRadiant, towerStatusDire, barracksStatusRadiant, barracksStatusDire, ancientStatusRadiant, ancientStatusDire);
 
     return (<svg
         style={{
@@ -27,6 +30,14 @@ export const BuildingStatus: React.FC<BuildingStatusProps> = (props) => {
             y="0"
             width="500"
             height="500"
+        />
+        <AncientSvg
+            svg={{
+                x: direAncient.x,
+                y: direAncient.y
+            }}
+            isActive={direAncient.isActive}
+            teamSide={TeamSide.Dire}
         />
         {direBarracks.map((barracksStatus, index) => (
             <BarracksSvg key={index} svg={{
@@ -64,5 +75,13 @@ export const BuildingStatus: React.FC<BuildingStatusProps> = (props) => {
                 isActive={barracksStatus.isActive}
             />
         ))}
+        <AncientSvg
+            svg={{
+                x: radiantAncient.x,
+                y: radiantAncient.y
+            }}
+            isActive={radiantAncient.isActive}
+            teamSide={TeamSide.Radiant}
+        />
     </svg>);
 }

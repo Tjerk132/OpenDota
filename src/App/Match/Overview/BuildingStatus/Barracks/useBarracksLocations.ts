@@ -1,6 +1,6 @@
 import { TeamSide } from "../../../../../domain/Player/TeamSide"
 import { BarracksType } from "../BarracksType"
-import { Lane } from "../Lane"
+import { Lane } from "../../../../../domain/Game/Lane"
 import { BarracksLocations } from "./BarracksLocations"
 
 

@@ -1,5 +1,5 @@
 import { BarracksType } from "../BarracksType";
-import { Lane } from "../Lane";
+import { Lane } from "../../../../../domain/Game/Lane";
 
 export const useBarracksStatus = () => {
 

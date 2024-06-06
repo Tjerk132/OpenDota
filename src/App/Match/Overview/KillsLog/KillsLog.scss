@@ -1,6 +1,9 @@
 .kills-log {
+    display: flex;
+    flex-direction: row;
     padding: 4px;
     h4 {
         text-align: left;
+        margin: 0;
     }
 }

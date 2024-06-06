@@ -10,8 +10,11 @@ import { PicksAndBansProps } from "../../App/Match/Overview/PicksAndBans/PicksAn
 import { TeamAdvantagesProps } from "../../App/Match/Overview/TeamAdvantages/TeamAdvantagesProps";
 import { BuildingStatusProps } from "../../App/Match/Overview/BuildingStatus/BuildingStatusProps";
 import { KillsLogProps } from "../../App/Match/Overview/KillsLog/KillsLogProps";
-import { PlayerKillsHero } from "../../App/Match/Overview/KillsLog/TeamKills/PlayerKillsHero";
 import { useHeroesQuery } from "../../api/constants/heroes/useHeroesQuery";
+import { useXpLevelQuery } from "../../api/constants/xp_level/useXpLevelQuery";
+import { Hero } from "../../api/constants/heroes/DTO/Heroes";
+import { useBountyCalculator } from "../../hooks/calculators/useBountyCalculator";
+import { AbilityUpgradesProps } from "../../App/Match/Overview/AbilityUpgrades/AbilityUpgradesProps";
 
 export const useMatchOverviewPage = (matchId: number) => {
     const { useMatch } = useMatchesQuery();
@@ -19,6 +22,9 @@ export const useMatchOverviewPage = (matchId: number) => {
     const { data: match, isLoading } = useMatch(matchId);
 
     const { useHeroesByTeam } = useHeroesQuery();
+    const { playerLevelByMinute } = useXpLevelQuery();
+
+    const { calculateKillBounty } = useBountyCalculator();
 
     const [tabIndex, setTabIndex] = useState(0);
 
@@ -38,61 +44,11 @@ export const useMatchOverviewPage = (matchId: number) => {
         matchDuration: match.duration / 60 //sec to min
     };
 
-    const picksAndBans: PicksAndBansProps = {
-        picksAndBans: match.picks_bans?.map(pick_ban => ({
-            isPick: pick_ban.is_pick,
-            teamSide: pick_ban.team === 0 ? TeamSide.Radiant : TeamSide.Dire,
-            heroId: pick_ban.hero_id,
-            order: pick_ban.order
-        }))
-    };
-
-    const teamAdvantages: TeamAdvantagesProps = {
-        radiantGoldAdvantage: match.radiant_gold_adv,
-        radiantXpAdvantage: match.radiant_xp_adv
-    };
-
-    const buildingStatus: BuildingStatusProps = {
-        towerStatusRadiant: match.tower_status_radiant,
-        towerStatusDire: match.tower_status_dire,
-        barracksStatusRadiant: match.barracks_status_radiant,
-        barracksStatusDire: match.barracks_status_dire
-    }
-
     const radiantPlayers = match.players?.filter(player => player.isRadiant) ?? [];
     const direPlayers = match.players?.filter(player => !player.isRadiant) ?? [];
 
     const radiantHeroes = useHeroesByTeam(radiantPlayers.map(player => player.hero_id))
     const direHeroes = useHeroesByTeam(direPlayers.map(player => player.hero_id))
-
-    const killsLog: KillsLogProps = {
-        radiantKills: radiantPlayers.map(player => ({
-            heroId: player.hero_id,
-            kills: direHeroes.map(hero => {
-                const killAmount = player.kills_log
-                    .filter(killLog => killLog.key === hero.name);
-                
-                return {
-                    heroName: hero.name,
-                    amount: killAmount.length,
-                    gainedGold: 0 //find way to determine this
-                }
-            })
-        })),
-        direKills: direPlayers.map(player => ({
-            heroId: player.hero_id,
-            kills: radiantHeroes.map(hero => {
-                const killAmount = player.kills_log
-                    .filter(killLog => killLog.key === hero.name);
-                
-                return {
-                    heroName: hero.name,
-                    amount: killAmount.length,
-                    gainedGold: 0 //find way to determine this
-                }
-            })
-        }))
-    }
 
     const mapPlayerToProps = (player: Player, index: number) => {
         // var playerSlot = player.player_slot;
@@ -117,8 +73,9 @@ export const useMatchOverviewPage = (matchId: number) => {
             teamSide: player.isRadiant ? TeamSide.Radiant : TeamSide.Dire,
             heroId: player.hero_id,
             level: player.level,
-            role: 'Role', //get by team_slot,player_slot?
-            lane: position.toString(),//"Lane",
+            role: player.lane_role, //get by team_slot,player_slot?
+            isRoaming: player.is_roaming,
+            lane: player.lane,
             player: player.personaname,
             kills: player.kills,
             deaths: player.deaths,
@@ -165,5 +122,114 @@ export const useMatchOverviewPage = (matchId: number) => {
         players: direPlayers.map(mapPlayerToProps)
     } as PlayersTableProps;
 
-    return { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, teamAdvantages, buildingStatus, killsLog, isLoading }
+    const picksAndBans: PicksAndBansProps = {
+        picksAndBans: match.picks_bans?.map(pick_ban => ({
+            isPick: pick_ban.is_pick,
+            teamSide: pick_ban.team === 0 ? TeamSide.Radiant : TeamSide.Dire,
+            heroId: pick_ban.hero_id,
+            order: pick_ban.order
+        }))
+    };
+
+    const teamAdvantages: TeamAdvantagesProps = {
+        radiantGoldAdvantage: match.radiant_gold_adv,
+        radiantXpAdvantage: match.radiant_xp_adv
+    };
+
+    const buildingStatus: BuildingStatusProps = {
+        towerStatusRadiant: match.tower_status_radiant,
+        towerStatusDire: match.tower_status_dire,
+        barracksStatusRadiant: match.barracks_status_radiant,
+        barracksStatusDire: match.barracks_status_dire,
+        ancientStatusRadiant: match.radiant_win ? 1 : 0,
+        ancientStatusDire: match.radiant_win ? 0 : 1
+    }
+    
+    //if first blood, (extra 150 gold) 135?
+    const mapPlayerKillsForHero = (player: Player, playerHero: Hero, killedHero: Hero, opposingPlayers: Player[]) => {
+
+        const opposingPlayer = opposingPlayers.find(player => player.hero_id === killedHero.id)!;
+
+        const playerKilledHeroKillLogs = player.kills_log
+            .filter(killLog => killLog.key === killedHero.name);
+
+        const gainedGold = playerKilledHeroKillLogs.map(heroKilledLog => {
+            
+            //who of enemy team killed the current player hero
+            const playerKilledKillLogs = opposingPlayers
+                .map(player => player.kills_log)
+                .flatMap(killsLog => killsLog)
+                .filter(killLog => killLog.key === playerHero.name);
+
+            // most recent death of current player hero before time of current kill
+            const mostRecentDeathTime = playerKilledKillLogs.filter(killLog => 
+                    killLog.time < heroKilledLog.time
+            ).max(killLog => killLog.time);
+
+            const playerKillsBeforeKill = player.kills_log.filter(log =>
+                log.time <= heroKilledLog.time &&
+                log.time > mostRecentDeathTime //default 0
+            ).length;
+
+            const minute = heroKilledLog.time < 60 ? 0 : heroKilledLog.time % 60;
+
+            const killedPlayerLevel = playerLevelByMinute(opposingPlayer, minute);
+
+            const bounty = calculateKillBounty(killedPlayerLevel, playerKillsBeforeKill);
+
+            // if (playerHero.name.includes('clinkz') && killedHero.name.includes("zuus")) {
+            //     console.log('clinkz got bounty of ', bounty, ' for killing ', heroKilledLog.key, ' at level ', killedPlayerLevel, ' with streak ', playerKillsBeforeKill);
+            // }
+
+            return bounty;
+
+        }).sum(bounty => bounty);
+
+        return {
+            heroName: killedHero.name,
+            amount: playerKilledHeroKillLogs.length,
+            gainedGold: gainedGold
+        }
+    }
+
+    const killsLog: KillsLogProps = {
+        radiantKills: radiantPlayers.map(player => ({
+            heroId: player.hero_id,
+            kills: direHeroes.map(direHero => {
+                const playerHero = radiantHeroes.find(hero => hero.id === player.hero_id)!;
+                return mapPlayerKillsForHero(player, playerHero, direHero, direPlayers);
+            })
+        })),
+        direKills: direPlayers.map(player => ({
+            heroId: player.hero_id,
+            kills: radiantHeroes.map(radiantHero => {
+                const playerHero = direHeroes.find(hero => hero.id === player.hero_id)!;
+                return mapPlayerKillsForHero(player, playerHero, radiantHero, radiantPlayers);
+            })
+        }))
+    }
+
+    const abilityUpgrades = {
+        abilityUpgradesRadiant: radiantPlayers.map(player => ({
+            heroId: player.hero_id,
+            abilityUpgrades: player.ability_upgrades_arr
+        })),
+        abilityUpgradesDire: direPlayers.map(player => ({
+            heroId: player.hero_id,
+            abilityUpgrades: player.ability_upgrades_arr
+        })) 
+    } as AbilityUpgradesProps;
+
+    return { 
+        matchOverviewHeader, 
+        matchResult, 
+        radiantPlayersTable, 
+        direPlayersTable, 
+        picksAndBans, 
+        teamAdvantages, 
+        buildingStatus, 
+        killsLog,
+        abilityUpgrades,
+        isLoading 
+    }
 }

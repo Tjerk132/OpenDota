@@ -3,4 +3,6 @@ export interface BuildingStatusProps {
     towerStatusDire: number;
     barracksStatusRadiant: number;
     barracksStatusDire: number;
+    ancientStatusRadiant: number;
+    ancientStatusDire: number;
 }

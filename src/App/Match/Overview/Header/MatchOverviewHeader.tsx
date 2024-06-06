@@ -31,6 +31,10 @@ export const MatchOverviewHeader: React.FC<MatchOverviewHeaderProps> = (props) =
         const secondsToDays = (60 * 60 * 24);
 
         var daysAgo = Math.ceil((unixNow - (unixStartTime + matchDuration)) / secondsToDays);
+        if(daysAgo >= 30) {
+            var monthsAgo = daysAgo / 30;
+            return `${monthsAgo.toFixed(0)} months ago`;
+        }
         if (daysAgo >= 7) {
             var weeksAgo = daysAgo / 7;
             return `${weeksAgo.toFixed(0)} weeks ago`;

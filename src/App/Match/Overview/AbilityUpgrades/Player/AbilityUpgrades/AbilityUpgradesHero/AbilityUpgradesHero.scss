@@ -1,0 +1,15 @@
+.ability-upgrades-hero {
+    display: flex;
+    flex-direction: row;
+    padding: 2px;
+    &__abilities {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        &--img {
+            padding: 2px;
+            width: 24px;
+            height: 24px;
+        }
+    }
+}

@@ -4,6 +4,7 @@ import { useTeamAdvantages } from "./useTeamAdvantages";
 import { useState } from "react";
 import { Box, Tab, Tabs } from "@mui/material";
 import { TeamAdvantageGraph } from "../../../../domain/Graph/TeamAdvantage/TeamAdvantageGraph";
+import "./TeamAdvantages.scss";
 
 export const TeamAdvantages: React.FC<TeamAdvantagesProps> = (props) => {
 
@@ -15,7 +16,7 @@ export const TeamAdvantages: React.FC<TeamAdvantagesProps> = (props) => {
 
     const { advantageGraph } = useTeamAdvantages(teamAdvantageGraphData);
 
-    return (<div>
+    return (<div className="team-advantages">
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs 
                 value={activeGraph} 

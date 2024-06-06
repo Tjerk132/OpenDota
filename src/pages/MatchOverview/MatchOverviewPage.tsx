@@ -9,13 +9,14 @@ import { TeamAdvantages } from '../../App/Match/Overview/TeamAdvantages/TeamAdva
 import './MatchOverviewPage.scss';
 import { BuildingStatus } from '../../App/Match/Overview/BuildingStatus/BuildingStatus';
 import { KillsLog } from '../../App/Match/Overview/KillsLog/KillsLog';
+import { AbilityUpgrades } from '../../App/Match/Overview/AbilityUpgrades/AbilityUpgrades';
 
 export const MatchOverviewPage: React.FC = () => {
 
   const { matchId: matchIdParam } = useParams();
   const matchId = Number(matchIdParam ?? 0);
 
-  const { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, teamAdvantages, buildingStatus, killsLog, isLoading } = useMatchOverviewPage(matchId);
+  const { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, teamAdvantages, buildingStatus, killsLog, abilityUpgrades, isLoading } = useMatchOverviewPage(matchId);
 
   return (
     <div className="App">
@@ -47,6 +48,8 @@ export const MatchOverviewPage: React.FC = () => {
         <BuildingStatus {...buildingStatus} />
 
         <KillsLog {...killsLog} />
+
+        <AbilityUpgrades {...abilityUpgrades} />
 
         <br />
         <br />
