@@ -1,11 +1,10 @@
 import { useAbilityQuery } from "../../../../../api/constants/abilities/useAbilityQuery";
-import { Hero } from "../../../../../components/image/Hero/Hero";
 import { HeroAbilityUpgradesProps } from "../AbilityUpgradesProps";
 import { AbilityUpgradesHero } from "./AbilityUpgrades/AbilityUpgradesHero/AbilityUpgradesHero";
 import "./AbilityUpgradesPlayer.scss";
 
 export const AbilityUpgradesPlayer: React.FC<HeroAbilityUpgradesProps> = (props) => {
-    const { heroId, abilityUpgrades } = props;
+    const { abilityUpgrades } = props;
 
     const { abilities } = useAbilityQuery();
 
@@ -14,7 +13,6 @@ export const AbilityUpgradesPlayer: React.FC<HeroAbilityUpgradesProps> = (props)
     })
 
     return (<div className="ability-upgrades-player">
-        <Hero heroId={heroId} style={{ width: 42, height: 24 }} />
         <AbilityUpgradesHero abilities={heroAbilityUpgrades} />
     </div>);
 }

@@ -1,8 +1,15 @@
 .ability-upgrades-team {
     padding: 2px;
+    overflow-x: auto;
+
+    &--radiant {
+        background: rgba(146, 165, 37, 0.12);
+    }
+    &--dire {
+        background: rgba(194, 60, 42, 0.12);
+    }
     &__levels {
-        display: flex;
-        padding-left: 46px;
+        padding: 0 8px 0 8px;
         font-size: 12px;
         span {
             width: 28px;

@@ -10,51 +10,65 @@ import './MatchOverviewPage.scss';
 import { BuildingStatus } from '../../App/Match/Overview/BuildingStatus/BuildingStatus';
 import { KillsLog } from '../../App/Match/Overview/KillsLog/KillsLog';
 import { AbilityUpgrades } from '../../App/Match/Overview/AbilityUpgrades/AbilityUpgrades';
+import { Grid, Paper, styled } from '@mui/material';
+import { Item } from '../../components/Item';
 
 export const MatchOverviewPage: React.FC = () => {
 
-  const { matchId: matchIdParam } = useParams();
-  const matchId = Number(matchIdParam ?? 0);
+    const { matchId: matchIdParam } = useParams();
+    const matchId = Number(matchIdParam ?? 0);
 
-  const { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, teamAdvantages, buildingStatus, killsLog, abilityUpgrades, isLoading } = useMatchOverviewPage(matchId);
+    const { matchOverviewHeader, matchResult, radiantPlayersTable, direPlayersTable, picksAndBans, teamAdvantages, buildingStatus, killsLog, abilityUpgrades, isLoading } = useMatchOverviewPage(matchId);
 
-  return (
-    <div className="App">
-      <title>Match Overview</title>
-      <header className="App-header">
-      </header>
-      {isLoading ? "Loading..." : <div>
+    return (
+        <div className="App">
+            <title>Match Overview</title>
+            <header className="App-header">
+            </header>
+            {isLoading ? "Loading..." : <div>
 
-        <MatchOverviewHeader {...matchOverviewHeader} />
+                <MatchOverviewHeader {...matchOverviewHeader} />
 
-        <Divider />
+                <Divider />
 
-        <MatchResult {...matchResult} />
+                <MatchResult {...matchResult} />
 
-        <h2>The Radiant</h2>
-        <PlayersTable {...radiantPlayersTable} />
+                <h2>The Radiant</h2>
+                <PlayersTable {...radiantPlayersTable} />
 
-        <h2>The Dire</h2>
-        <PlayersTable {...direPlayersTable} />
+                <h2>The Dire</h2>
+                <PlayersTable {...direPlayersTable} />
 
-        <h3>Picks and Bans</h3>
+                <Grid item xs={12}>
+                    <h3>Picks and Bans</h3>
+                    <Item>
+                        <PicksAndBans {...picksAndBans} />
+                    </Item>
+                </Grid>
 
-        <PicksAndBans {...picksAndBans} />
+                <Grid container spacing={1}>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <Item>
+                            <h3>Team advantages per minute</h3>
+                            <TeamAdvantages {...teamAdvantages} />
+                        </Item>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <Item>
+                            <h3>Towers and barracks</h3>
+                            <BuildingStatus {...buildingStatus} />
+                        </Item>
+                    </Grid>
+                </Grid>
 
-        <h3>Team advantages per minute</h3>
+                <KillsLog {...killsLog} />
 
-        <TeamAdvantages {...teamAdvantages} />
+                <AbilityUpgrades {...abilityUpgrades} />
 
-        <BuildingStatus {...buildingStatus} />
+                <br />
+                <br />
 
-        <KillsLog {...killsLog} />
-
-        <AbilityUpgrades {...abilityUpgrades} />
-
-        <br />
-        <br />
-
-        {/*
+                {/*
     {JSON.stringify(match.pre_game_duration)}
     {JSON.stringify(match.start_time)}
     {JSON.stringify(match.match_seq_num)}
@@ -70,7 +84,7 @@ export const MatchOverviewPage: React.FC = () => {
     {JSON.stringify(match.metadata)}
     <br />
     {JSON.stringify(match.patch)} */}
-      </div>}
-    </div>
-  )
+            </div>}
+        </div>
+    )
 }

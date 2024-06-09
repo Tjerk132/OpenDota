@@ -14,13 +14,15 @@ export const useBuildingStatus = (
     barracksStatusRadiant: number,
     barracksStatusDire: number,
     ancientStatusRadiant: number,
-    ancientStatusDire: number
+    ancientStatusDire: number,
+
 ) => {
 
     const { getActiveTowers } = useTowerStatus();
     const { getActiveBarracks } = useBarracksStatus();
 
     const { getByTeamSide: getTowerLocationsByTeamSide } = useTowerLocations();
+
     const { getByTeamSide: getBarracksLocationsByTeamSide } = useBarrackLocations();
     const { getByTeamSide: getAncientLocationByTeamSide } = useAncientLocations();
 

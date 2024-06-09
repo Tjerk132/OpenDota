@@ -10,30 +10,30 @@ export const useBarrackLocations = () => {
     const barracksLocations: BarracksLocations = {
         [TeamSide.Radiant]: {
             [Lane.Top]: [
-                { type: BarracksType.Melee, x: 40, y: 335 },
-                { type: BarracksType.Ranged, x: 55, y: 335 }
+                { type: BarracksType.Melee, x: 25, y: 240 },
+                { type: BarracksType.Ranged, x: 40, y: 240 }
             ],
             [Lane.Mid]: [
-                { type: BarracksType.Melee, x: 90, y: 350 },
-                { type: BarracksType.Ranged, x: 105, y: 360 }
+                { type: BarracksType.Melee, x: 55, y: 250 },
+                { type: BarracksType.Ranged, x: 75, y: 260 }
             ],
             [Lane.Bot]: [
-                { type: BarracksType.Melee, x: 110, y: 405 },
-                { type: BarracksType.Ranged, x: 110, y: 420 }
+                { type: BarracksType.Melee, x: 75, y: 285 },
+                { type: BarracksType.Ranged, x: 75, y: 300 }
             ],
         },
         [TeamSide.Dire]: {
             [Lane.Top]: [
-                { type: BarracksType.Melee, x: 360, y: 50 },
-                { type: BarracksType.Ranged, x: 360, y: 70 }
+                { type: BarracksType.Melee, x: 260, y: 35 },
+                { type: BarracksType.Ranged, x: 260, y: 45 }
             ],
             [Lane.Mid]: [
-                { type: BarracksType.Melee, x: 360, y: 110 },
-                { type: BarracksType.Ranged, x: 380, y: 125 }
+                { type: BarracksType.Melee, x: 260, y: 70 },
+                { type: BarracksType.Ranged, x: 275, y: 85 }
             ],
             [Lane.Bot]: [
-                { type: BarracksType.Melee, x: 415, y: 135 },
-                { type: BarracksType.Ranged, x: 435, y: 135 }
+                { type: BarracksType.Melee, x: 300, y: 90 },
+                { type: BarracksType.Ranged, x: 315, y: 90 }
             ],
         }
     }

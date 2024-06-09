@@ -20,16 +20,16 @@ export const BuildingStatus: React.FC<BuildingStatusProps> = (props) => {
 
     return (<svg
         style={{
-            width: 500,
-            height: 500,
+            width: 360,
+            height: 360,
         }}
     >
         <image
             href="/map.jpg"
             x="0"
             y="0"
-            width="500"
-            height="500"
+            width="360"
+            height="360"
         />
         <AncientSvg
             svg={{

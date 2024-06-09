@@ -8,12 +8,12 @@ export const useAncientLocations = () => {
     const ancientsLocations: AncientLocations = {
         [TeamSide.Radiant]: {
             [Lane.Mid]: [
-                { x: 60, y: 395 }
+                { x: 35, y: 295 }
             ]
         },
         [TeamSide.Dire]: {
             [Lane.Mid]: [
-                { x: 405, y: 90 },
+                { x: 295, y: 50 },
             ]
         }
     }

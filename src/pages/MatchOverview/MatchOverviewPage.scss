@@ -1,5 +1,10 @@
 .App {
+  min-width: 360px;
   text-align: center;
+
+  h3 {
+    margin: 0
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
